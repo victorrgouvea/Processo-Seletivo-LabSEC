@@ -1,8 +1,8 @@
 # LabSEC Pré-desafio - Cryptopals - Single-byte XOR cipher - Challenge 3
 
 import string
-from Fixed_XOR import fixed_xor  # Due to this import, the first two lines of
-                                 # prints when this file is executed are from Fixed_XOR.py
+from Fixed_XOR import fixed_xor  # Due to this import, the first two lines of prints
+                                 # when this file is executed can be from Fixed_XOR.py
 
 
 # Dict with the frequency of each letter in the english dictionary
@@ -78,7 +78,10 @@ def single_byte_xor_cipher(hex_string):
     
     return max_score, max_key, max_text
 
+
 # Challenge exemple:
+
+print('--------------------- Challenge 3 ---------------------')
 
 a, b, c = single_byte_xor_cipher('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736')
 print('Score:', a)
