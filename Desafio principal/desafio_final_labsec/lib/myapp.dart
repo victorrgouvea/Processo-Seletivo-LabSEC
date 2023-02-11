@@ -1,3 +1,4 @@
+import 'package:desafio_final_labsec/homecontroller.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 
@@ -6,8 +7,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
-    );
+    return MaterialApp(home: HomePage());
   }
 }
