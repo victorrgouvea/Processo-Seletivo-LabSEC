@@ -8,7 +8,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,34 +20,49 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text('Escolha uma das opções abaixo:'),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
-              onPressed: () {
-                print('BLE');
-              },
-              child: const Text('Dispositivos BLE'),
+            const Text(
+              'Escolha uma das opções abaixo:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                print('RSA');
+                Navigator.pushNamed(context, '/BLE');
               },
-              child: const Text('Gerar chave RSA'),
+              child: const Text(
+                'Dispositivos BLE',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                print('assinar');
+                Navigator.pushNamed(context, '/RSA_key');
               },
-              child: const Text('Assinar lista'),
+              child: const Text(
+                'Gerar chave RSA',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                print('verificar');
+                Navigator.pushNamed(context, '/sign_list');
               },
-              child: const Text('Verificar assinatura'),
+              child: const Text(
+                'Assinar lista',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
+              onPressed: () {
+                Navigator.pushNamed(context, '/verify_sign');
+              },
+              child: const Text(
+                'Verificar assinatura',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             )
           ],
         ),
@@ -56,22 +70,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-/* body: SizedBox(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            margin: EdgeInsets.all(20),
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: Size(50, 80),
-                    textStyle: TextStyle(fontSize: 28)),
-                onPressed: () {
-                  print('oioioioioi');
-                },
-                child: const Text('Dispositivos BLE')),
-          )
-        ],
-      )), */
