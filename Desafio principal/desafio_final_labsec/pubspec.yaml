@@ -29,7 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter_blue: ^0.8.0
-  permission_handler: ^6.0.0
+  permission_handler: ^10.2.0
   flutter:
     sdk: flutter
 
