@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:intl/intl.dart';
 
 class BleDevicesPage extends StatefulWidget {
   BleDevicesPage({super.key});
 
   FlutterBlue flutter_blue = FlutterBlue.instance;
   var devices = [];
+  String date_time = 'Nunca';
   //bool all_permissions = true;
 
   @override
@@ -18,6 +20,7 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
   //var date_time;
   //var devices = [];
   bool all_permissions = true;
+  final loading = ValueNotifier<bool>(false);
 
   // Checa todas as permissões
   void checkPermission() async {
@@ -63,8 +66,6 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
     }
   }
 
-  // https://blog.kuzzle.io/communicate-through-ble-using-flutter
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,55 +82,71 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
               'Dispositivos BLE',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.devices.length,
-                itemBuilder: (context, index) {
-                  var nome = widget.devices[index].name;
-                  var id = widget.devices[index].id.toString();
-                  if (nome == '') {
-                    nome = 'Nome desconhecido';
-                  }
-                  return ListTile(
-                    title: Text('- $nome'),
-                    subtitle: Text(id),
-                  );
-                }),
+            Text(
+              'Dispositivos detectados: ${widget.devices.length} \n Última varredura: ${widget.date_time}',
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
+            ),
+            SizedBox(
+              height: 400,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.devices.length,
+                  itemBuilder: (context, index) {
+                    var nome = widget.devices[index].name;
+                    var id = widget.devices[index].id.toString();
+                    if (nome == '') {
+                      nome = 'Nome desconhecido';
+                    }
+                    return ListTile(
+                      title: Text('- $nome'),
+                      subtitle: Text(id),
+                    );
+                  }),
+            ),
             // Botão que faz a listagem dos dispositivos BLE próximos
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                //late int all_permissions;
+                // Pega e formata data e hora da varredura
+                DateTime now = DateTime.now();
+                String formated_date =
+                    DateFormat('dd/MM/yyyy - HH:mm:ss').format(now);
+                widget.date_time = formated_date;
+
+                // Checa as permissões bluetooth
                 checkPermission();
 
+                // Faz o scan por dispositivos BLE
                 bluetooth_scan();
 
-                Future.delayed(const Duration(seconds: 2), () {
-                  setState(() {});
-                });
-                //setState(() {
-                /*if (all_permissions) {
-                    devices = [];
-                    // Caso as permissões sejam concedidas, inicia a
-                    // procura por dispositivos BLE
-                    flutter_blue.startScan(timeout: Duration(seconds: 3));
-                      // Armazenamos os dados dos dispositivos detectados
-                      var scan_results =
-                          flutter_blue.scanResults.listen((results) {
-                        print(results);
-                        for (ScanResult r in results) {
-                          devices.add(r.device.name);
-                        }
-                      });
+                // Ativa o círculo de loading no botão
+                loading.value = !loading.value;
 
-                      flutter_blue.stopScan();
-                  }*/
-                //});
+                // Tempo para a espera do scan
+                Future.delayed(const Duration(seconds: 2), () {
+                  setState(() {
+                    // Desativa o cícrulo de loading do botão
+                    loading.value = !loading.value;
+                  });
+                });
               },
-              child: const Text(
-                'Atualizar lista',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
+              child: AnimatedBuilder(
+                  animation: loading,
+                  builder: (context, _) {
+                    return loading.value
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Atualizar lista',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          );
+                  }),
             )
           ],
         ),
