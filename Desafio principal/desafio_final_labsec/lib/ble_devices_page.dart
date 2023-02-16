@@ -2,25 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart'; // biblioteca para formatar a data
+import 'app_provider.dart';
 
 class BleDevicesPage extends StatefulWidget {
-  BleDevicesPage({super.key});
-
-  FlutterBlue flutter_blue = FlutterBlue.instance;
-  var devices = [];
-  String date_time = 'Nunca';
-  //bool all_permissions = true;
+  const BleDevicesPage({super.key});
 
   @override
   State<BleDevicesPage> createState() => _BleDevicesPageState();
 }
 
 class _BleDevicesPageState extends State<BleDevicesPage> {
-  //FlutterBlue flutter_blue = FlutterBlue.instance;
-  //var date_time;
-  //var devices = [];
+  FlutterBlue flutter_blue = FlutterBlue.instance;
   bool all_permissions = true;
-  final loading = ValueNotifier<bool>(false);
 
   // Checa todas as permissões
   void checkPermission() async {
@@ -44,30 +38,33 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
     }
   }
 
-  void bluetooth_scan() {
-    if (all_permissions) {
-      widget.devices = [];
-      var id_list = [];
-      // Caso as permissões sejam concedidas, inicia a
-      // procura por dispositivos BLE
-      // Armazenamos os dados dos dispositivos detectados
-      widget.flutter_blue.startScan(timeout: Duration(seconds: 1));
-
-      var scan_results = widget.flutter_blue.scanResults.listen((results) {
-        print(results);
-        for (ScanResult r in results) {
-          if (!id_list.contains(r.device.id.toString())) {
-            widget.devices.add(r.device);
-            id_list.add(r.device.id.toString());
-          }
-        }
-      });
-      widget.flutter_blue.stopScan();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    var devices = context.watch<AppProvider>().devicesList;
+    var date_time = context.watch<AppProvider>().lastScanDate;
+
+    void bluetooth_scan() {
+      if (all_permissions) {
+        context.read<AppProvider>().cleanDevicesList();
+        var id_list = [];
+        // Caso as permissões sejam concedidas, inicia a
+        // procura por dispositivos BLE
+        // Armazenamos os dados dos dispositivos detectados
+        flutter_blue.startScan(timeout: Duration(seconds: 1));
+
+        var scan_results = flutter_blue.scanResults.listen((results) {
+          //print(results);
+          for (ScanResult r in results) {
+            if (!id_list.contains(r.device.id.toString())) {
+              context.read<AppProvider>().addDevicesList(r.device);
+              id_list.add(r.device.id.toString());
+            }
+          }
+        });
+        flutter_blue.stopScan();
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('LabSEC - Desafio principal'),
@@ -83,17 +80,17 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Text(
-              'Dispositivos detectados: ${widget.devices.length} \n Última varredura: ${widget.date_time}',
+              'Dispositivos detectados: ${devices.length} \n Última varredura: ${date_time}',
               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
             ),
             SizedBox(
               height: 400,
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.devices.length,
+                  itemCount: devices.length,
                   itemBuilder: (context, index) {
-                    var nome = widget.devices[index].name;
-                    var id = widget.devices[index].id.toString();
+                    var nome = devices[index].name;
+                    var id = devices[index].id.toString();
                     if (nome == '') {
                       nome = 'Nome desconhecido';
                     }
@@ -111,42 +108,18 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
                 DateTime now = DateTime.now();
                 String formated_date =
                     DateFormat('dd/MM/yyyy - HH:mm:ss').format(now);
-                widget.date_time = formated_date;
+                context.read<AppProvider>().setLastScanDate(formated_date);
 
                 // Checa as permissões bluetooth
                 checkPermission();
 
                 // Faz o scan por dispositivos BLE
                 bluetooth_scan();
-
-                // Ativa o círculo de loading no botão
-                loading.value = !loading.value;
-
-                // Tempo para a espera do scan
-                Future.delayed(const Duration(seconds: 2), () {
-                  setState(() {
-                    // Desativa o cícrulo de loading do botão
-                    loading.value = !loading.value;
-                  });
-                });
               },
-              child: AnimatedBuilder(
-                  animation: loading,
-                  builder: (context, _) {
-                    return loading.value
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Atualizar lista',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          );
-                  }),
+              child: const Text(
+                'Atualizar lista',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             )
           ],
         ),

@@ -7,7 +7,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
                 Navigator.pushNamed(context, '/BLE');
+                //Navigator.of(context).pushNamed('/BLE').then()
               },
               child: const Text(
                 'Dispositivos BLE',

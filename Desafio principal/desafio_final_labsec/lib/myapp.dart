@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
-        '/BLE': (context) => BleDevicesPage(),
+        '/BLE': (context) => const BleDevicesPage(),
         '/RSA_key': (context) => const RsaKeyPage(),
         '/gen_key': (context) => const GenerateKeyPage(),
         '/sign_list': (context) => const SignListPage(),
