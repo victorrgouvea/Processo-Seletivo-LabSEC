@@ -16,33 +16,34 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
   FlutterBlue flutter_blue = FlutterBlue.instance;
   bool all_permissions = true;
 
-  // Checa todas as permissões
-  void checkPermission() async {
-    // Permissões para o bluetooth
-    PermissionStatus bluetooth_scan = await Permission.bluetoothScan.request();
-
-    PermissionStatus bluetooth_connect =
-        await Permission.bluetoothConnect.request();
-
-    PermissionStatus bluetooth_adv =
-        await Permission.bluetoothAdvertise.request();
-
-    // Se a permissão foi negada, uma mensagem de aviso é exibida
-    if (bluetooth_scan == PermissionStatus.permanentlyDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'As permissôes de bluetooth e dispositivos próximos é necessária para listar os dispositivos BLE. Ative-a nas configurações do seu celular')));
-      all_permissions = false;
-    } else {
-      all_permissions = true;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     var devices = context.watch<AppProvider>().devicesList;
     var date_time = context.watch<AppProvider>().lastScanDate;
 
+    // Checa todas as permissões
+    void checkPermission() async {
+      // Permissões para o bluetooth
+      PermissionStatus bluetooth_scan = await Permission.bluetoothScan.request();
+
+      PermissionStatus bluetooth_connect =
+          await Permission.bluetoothConnect.request();
+
+      PermissionStatus bluetooth_adv =
+          await Permission.bluetoothAdvertise.request();
+
+      // Se a permissão foi negada, uma mensagem de aviso é exibida
+      if (bluetooth_scan == PermissionStatus.permanentlyDenied) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                'As permissôes de bluetooth e dispositivos próximos é necessária para listar os dispositivos BLE. Ative-a nas configurações do seu celular')));
+        all_permissions = false;
+      } else {
+        all_permissions = true;
+      }
+    }
+    
     void bluetooth_scan() {
       if (all_permissions) {
         context.read<AppProvider>().cleanDevicesList();
@@ -53,7 +54,6 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
         flutter_blue.startScan(timeout: Duration(seconds: 1));
 
         var scan_results = flutter_blue.scanResults.listen((results) {
-          //print(results);
           for (ScanResult r in results) {
             if (!id_list.contains(r.device.id.toString())) {
               context.read<AppProvider>().addDevicesList(r.device);
