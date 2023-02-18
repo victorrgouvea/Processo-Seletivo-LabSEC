@@ -14,7 +14,6 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
   Widget build(BuildContext context) {
     var publicKey = context.watch<AppProvider>().publicKey;
     var privateKey = context.watch<AppProvider>().privateKey;
-    var keysGenerated = context.watch<AppProvider>().keysGenerated;
 
     /*var noKeys = Column(
       children: [
@@ -51,7 +50,47 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
               'Chave RSA',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            //keysGenerated ? keysData : noKeys,
+            SizedBox(
+              height: 400,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                (publicKey == null)
+                    ? ListTile(
+                        title: Text('Chave privada:'),
+                        subtitle: Text('Não gerada'),
+                      )
+                    : ListTile(
+                        title: Text('Chave privada:'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Módulo: ${privateKey.modulus}'),
+                            Text('Expoente: ${privateKey.privateExponent}'),
+                          ],
+                        ),
+                      ),
+                ListView(
+                  children: [
+                    (publicKey == null)
+                        ? ListTile(
+                            title: Text('Chave pública:'),
+                            subtitle: Text('Não gerada'),
+                          )
+                        : ListTile(
+                            title: Text('Chave pública:'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Módulo: ${publicKey.modulus}'),
+                                Text('Expoente: ${publicKey.publicExponent}'),
+                              ],
+                            ),
+                          ),
+                  ],
+                )
+              ]),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {

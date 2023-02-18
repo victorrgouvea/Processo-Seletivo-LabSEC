@@ -24,7 +24,7 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  var _privateKey;
+  var _privateKey = null;
   get privateKey => _privateKey;
 
   void setPrivateKey(key) {
@@ -32,7 +32,7 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  var _publicKey;
+  var _publicKey = null;
   get publicKey => _publicKey;
 
   void setPublicKey(key) {
@@ -40,6 +40,4 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  final bool _keysGenerated = false;
-  bool get keysGenerated => _keysGenerated;
 }
