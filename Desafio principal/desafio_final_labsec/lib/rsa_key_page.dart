@@ -15,27 +15,6 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
     var publicKey = context.watch<AppProvider>().publicKey;
     var privateKey = context.watch<AppProvider>().privateKey;
 
-    /*var noKeys = Column(
-      children: [
-        Text('Chave pública: Não gerada'),
-        Text(''),
-        Text('Chave privada: Não gerada'),
-        Text(''),
-      ],
-    );
-    var keysData = Column(
-      children: [
-        Text('Chave pública:'),
-        Text('Modulus: ${publicKey.modulus}'),
-        Text('Exponent: ${publicKey.publicExponent}'),
-        Text(''),
-        Text('Chave privada:'),
-        Text('Modulus: ${privateKey.modulus}'),
-        Text('Exponent: ${privateKey.privateExponent}'),
-        Text(''),
-      ],
-    );*/
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('LabSEC - Desafio principal'),
@@ -52,9 +31,7 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
             ),
             SizedBox(
               height: 400,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
+              child: ListView(shrinkWrap: true, children: [
                 (publicKey == null)
                     ? ListTile(
                         title: Text('Chave privada:'),
@@ -65,30 +42,26 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Módulo: ${privateKey.modulus}'),
-                            Text('Expoente: ${privateKey.privateExponent}'),
+                            Text('- Módulo: ${privateKey.modulus} \n '),
+                            Text('- Expoente: ${privateKey.privateExponent}'),
                           ],
                         ),
                       ),
-                ListView(
-                  children: [
-                    (publicKey == null)
-                        ? ListTile(
-                            title: Text('Chave pública:'),
-                            subtitle: Text('Não gerada'),
-                          )
-                        : ListTile(
-                            title: Text('Chave pública:'),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Módulo: ${publicKey.modulus}'),
-                                Text('Expoente: ${publicKey.publicExponent}'),
-                              ],
-                            ),
-                          ),
-                  ],
-                )
+                (publicKey == null)
+                    ? ListTile(
+                        title: Text('Chave pública:'),
+                        subtitle: Text('Não gerada'),
+                      )
+                    : ListTile(
+                        title: Text('Chave pública:'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('- Módulo: ${publicKey.modulus} \n '),
+                            Text('- Expoente: ${publicKey.publicExponent}'),
+                          ],
+                        ),
+                      ),
               ]),
             ),
             ElevatedButton(

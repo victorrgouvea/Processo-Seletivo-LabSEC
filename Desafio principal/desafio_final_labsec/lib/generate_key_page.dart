@@ -77,8 +77,7 @@ class _GenerateKeyPageState extends State<GenerateKeyPage> {
                         content: Text(
                             'O tamanho da chave deve ser um número positivo e maior que 11')));
                   } else {
-                    generateRsaKeys(key_size);
-                    /*try {
+                    try {
                       generateRsaKeys(key_size);
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Chaves geradas!')));
@@ -86,7 +85,7 @@ class _GenerateKeyPageState extends State<GenerateKeyPage> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
                               'As chaves não podem ser geradas com esse tamanho, tente outro número válido')));
-                    }*/
+                    }
                   }
                 }
               },
