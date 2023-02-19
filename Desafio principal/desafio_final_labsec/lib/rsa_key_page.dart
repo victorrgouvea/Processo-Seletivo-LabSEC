@@ -26,7 +26,7 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text(
-              'Chave RSA',
+              'Chaves RSA',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(
@@ -70,7 +70,7 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
                 Navigator.pushNamed(context, '/gen_key');
               },
               child: const Text(
-                'Gerar nova chave',
+                'Gerar novas chaves',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             )

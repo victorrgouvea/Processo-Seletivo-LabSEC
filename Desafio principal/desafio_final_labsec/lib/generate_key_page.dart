@@ -51,7 +51,7 @@ class _GenerateKeyPageState extends State<GenerateKeyPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text(
-              'Gerar nova chave',
+              'Gerar novas chaves',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Padding(
@@ -90,7 +90,7 @@ class _GenerateKeyPageState extends State<GenerateKeyPage> {
                 }
               },
               child: const Text(
-                'Gerar chave',
+                'Gerar chaves',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             )

@@ -40,4 +40,11 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  var _signature;
+  get signature => _signature;
+
+  void setSignature(sig) {
+    _signature = sig;
+    notifyListeners();
+  }
 }
