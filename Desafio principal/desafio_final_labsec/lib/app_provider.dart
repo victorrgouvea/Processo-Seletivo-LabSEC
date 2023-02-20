@@ -54,4 +54,12 @@ class AppProvider with ChangeNotifier {
     _hashedList = hash;
     notifyListeners();
   }
+
+  String _signatureState = '';
+  get signatureState => _signatureState;
+
+  void setSignatureState(sigState) {
+    _signatureState = sigState;
+    notifyListeners();
+  }
 }
