@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:pointycastle/export.dart';
 
 class AppProvider with ChangeNotifier {
   final List<BluetoothDevice> _devicesList = [];
@@ -40,11 +39,19 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  var _signature;
+  var _signature = null;
   get signature => _signature;
 
   void setSignature(sig) {
     _signature = sig;
+    notifyListeners();
+  }
+
+  var _hashedList;
+  get hashedList => _hashedList;
+
+  void setHashedList(hash) {
+    _hashedList = hash;
     notifyListeners();
   }
 }

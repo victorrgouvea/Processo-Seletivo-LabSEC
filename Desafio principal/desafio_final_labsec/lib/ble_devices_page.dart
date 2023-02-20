@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart'; // biblioteca para formatar a data
+import 'package:intl/intl.dart';  // biblioteca para formatar a data
+import 'package:provider/provider.dart';
 import 'app_provider.dart';
 
 class BleDevicesPage extends StatefulWidget {
@@ -56,8 +56,8 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
         var scan_results = flutter_blue.scanResults.listen((results) {
           for (ScanResult r in results) {
             if (!id_list.contains(r.device.id.toString())) {
-              context.read<AppProvider>().addDevicesList(r.device);
               id_list.add(r.device.id.toString());
+              context.read<AppProvider>().addDevicesList(r.device);
             }
           }
         });
@@ -80,7 +80,7 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Text(
-              'Dispositivos detectados: ${devices.length} \n Última varredura: ${date_time}',
+              'Dispositivos detectados: ${devices.length} \nÚltima varredura: ${date_time}',
               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 15),
             ),
             SizedBox(
@@ -116,6 +116,7 @@ class _BleDevicesPageState extends State<BleDevicesPage> {
                 // Faz o scan por dispositivos BLE
                 bluetooth_scan();
               },
+              // Texto do botão
               child: const Text(
                 'Atualizar lista',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

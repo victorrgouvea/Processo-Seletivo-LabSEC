@@ -1,9 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:desafio_final_labsec/app_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pointycastle/export.dart' hide State;
-import 'package:pointycastle/pointycastle.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 
@@ -19,19 +17,31 @@ class _SignListPageState extends State<SignListPage> {
   Widget build(BuildContext context) {
     var devicesList = context.watch<AppProvider>().devicesList;
     var privateKey = context.watch<AppProvider>().privateKey;
+    var signature = context.watch<AppProvider>().signature;
 
     void signList() {
       // Concatenamos a lista de dispositivos em uma String
-      // para aplicarmos o SHA256
-      final jsonString = jsonEncode(devicesList);
-      final jsonBytes = utf8.encode(jsonString);
-      final sha256 = SHA256Digest();
-      //final digestSHA256 = sha256.process(jsonBytes);
+      var conc = devicesList.join('');
 
+      // Transformamos a string da lista no formato
+      // necessário para gerar a assinatura
+      Uint8List list = Uint8List.fromList(conc.codeUnits);
+
+      // Calculamos o hash SHA256 da lista
+      final sha256 = SHA256Digest();
+      final listHash = sha256.process(list);
+
+      // Criação do objeto que gera a assinatura
+      // incialiazado com a chave privada já gerada anteriormente
       final signer = RSASigner(SHA256Digest(), '0609608648016503040201');
       signer.init(true, PrivateKeyParameter<RSAPrivateKey>(privateKey));
 
-      //final sig = signer.generateSignature();
+      // Geração da assinatura com o hash SHA256 da lista de dispositivos
+      final sig = signer.generateSignature(listHash);
+
+      // Guarda a assinatura e o hash no provider
+      context.read<AppProvider>().setSignature(sig);
+      context.read<AppProvider>().setHashedList(listHash);
     }
 
     return Scaffold(
@@ -48,9 +58,24 @@ class _SignListPageState extends State<SignListPage> {
               'Assinar lista',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            const Text(
-              'Assinatura:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            SizedBox(
+              height: 300,
+              width: 350,
+              child: (signature == null)
+                  ? const SingleChildScrollView(
+                      child: Text(
+                        'Assinatura: Inexistente',
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 20),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      child: Text(
+                        'Assinatura: ${base64.encode(signature.bytes)}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 20),
+                      ),
+                    ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
@@ -59,8 +84,7 @@ class _SignListPageState extends State<SignListPage> {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           'A sua lista de dispositivos não existe ou está vazia')));
-                }
-                if (privateKey == null) {
+                } else if (privateKey == null) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           'Você deve gerar suas chaves RSA para assinar a lista de dispositivos')));
