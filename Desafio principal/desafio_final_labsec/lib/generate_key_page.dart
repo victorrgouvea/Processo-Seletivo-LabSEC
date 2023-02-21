@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pointycastle/export.dart' hide Padding, State;
 import 'package:pointycastle/src/platform_check/platform_check.dart';
@@ -20,7 +17,6 @@ class _GenerateKeyPageState extends State<GenerateKeyPage> {
     TextEditingController number_controller = TextEditingController();
 
     void generateRsaKeys(int keySize) {
-      final seedGen = Random.secure();
       final secureRandom = SecureRandom('Fortuna')
         ..seed(KeyParameter(
             Platform.instance.platformEntropySource().getBytes(32)));

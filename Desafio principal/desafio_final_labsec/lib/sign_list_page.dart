@@ -80,7 +80,7 @@ class _SignListPageState extends State<SignListPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                if (devicesList == []) {
+                if (devicesList.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           'A sua lista de dispositivos não existe ou está vazia')));
