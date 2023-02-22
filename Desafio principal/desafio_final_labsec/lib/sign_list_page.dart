@@ -18,6 +18,7 @@ class _SignListPageState extends State<SignListPage> {
     var devicesList = context.watch<AppProvider>().devicesList;
     var privateKey = context.watch<AppProvider>().privateKey;
     var signature = context.watch<AppProvider>().signature;
+    bool changedSignature = false;
 
     void signList() {
       // Concatenamos a lista de dispositivos em uma String
@@ -38,6 +39,10 @@ class _SignListPageState extends State<SignListPage> {
 
       // Geração da assinatura com o hash SHA256 da lista de dispositivos
       final sig = signer.generateSignature(listHash);
+
+      if (sig != signature) {
+        changedSignature = true;
+      }
 
       // Guarda a assinatura e o hash no provider
       context.read<AppProvider>().setSignature(sig);
@@ -80,6 +85,7 @@ class _SignListPageState extends State<SignListPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
+                var prevSign = context.read<AppProvider>().signature;
                 if (devicesList.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
@@ -89,7 +95,20 @@ class _SignListPageState extends State<SignListPage> {
                       content: Text(
                           'Você deve gerar suas chaves RSA para assinar a lista de dispositivos')));
                 } else {
-                  signList();
+                  try {
+                    signList();
+                  } on ArgumentError {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            'A chave atual não pode ser usada para assinar a lista, crie um novo par de chaves com um tamanho maior')));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            'Algo deu errado, tente gerar outra chave para assinar a lista')));
+                  }
+                  if (changedSignature) {
+                    context.read<AppProvider>().setSignatureState('');
+                  }
                 }
               },
               child: const Text(

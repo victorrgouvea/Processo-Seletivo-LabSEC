@@ -65,9 +65,15 @@ class _VerifySignaturePageState extends State<VerifySignaturePage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
-                bool isValid = verifySignature();
-                String result = (isValid) ? 'válida' : 'inválida';
-                context.read<AppProvider>().setSignatureState(result);
+                if (signature != null) {
+                  bool isValid = verifySignature();
+                  String result = (isValid) ? 'válida' : 'inválida';
+                  context.read<AppProvider>().setSignatureState(result);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                          'Não existe nenhuma assinatura para ser verificada, assine a lista para fazer a verificação')));
+                }
               },
               child: const Text(
                 'Verificar novamente',

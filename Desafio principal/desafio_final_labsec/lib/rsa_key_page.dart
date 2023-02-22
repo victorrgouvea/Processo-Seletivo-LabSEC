@@ -33,12 +33,12 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
               height: 400,
               child: ListView(shrinkWrap: true, children: [
                 (publicKey == null)
-                    ? ListTile(
+                    ? const ListTile(
                         title: Text('Chave privada:'),
                         subtitle: Text('Não gerada'),
                       )
                     : ListTile(
-                        title: Text('Chave privada:'),
+                        title: const Text('Chave privada:'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -48,12 +48,12 @@ class _RsaKeyPageState extends State<RsaKeyPage> {
                         ),
                       ),
                 (publicKey == null)
-                    ? ListTile(
+                    ? const ListTile(
                         title: Text('Chave pública:'),
                         subtitle: Text('Não gerada'),
                       )
                     : ListTile(
-                        title: Text('Chave pública:'),
+                        title: const Text('Chave pública:'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
