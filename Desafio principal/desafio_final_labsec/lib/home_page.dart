@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// Tela principal do aplicativo
+// São definidos apenas o texto da parte de cima da tela e
+// os botões que levam até as outras telas do app através do Navigator
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -29,7 +33,6 @@ class _HomePageState extends State<HomePage>{
               style: ElevatedButton.styleFrom(minimumSize: const Size(280, 80)),
               onPressed: () {
                 Navigator.pushNamed(context, '/BLE');
-                //Navigator.of(context).pushNamed('/BLE').then()
               },
               child: const Text(
                 'Dispositivos BLE',

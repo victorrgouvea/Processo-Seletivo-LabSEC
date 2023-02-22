@@ -6,6 +6,10 @@ import 'generate_key_page.dart';
 import 'sign_list_page.dart';
 import 'verify_signature_page.dart';
 
+// Classe com a raiz do aplicativo, onde são
+// definidas as rotas que levam a cada tela do app
+// através do Navigator, começando pela home page
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
