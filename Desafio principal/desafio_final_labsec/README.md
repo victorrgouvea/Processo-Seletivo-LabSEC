@@ -1,16 +1,13 @@
-# desafio_final_labsec
+# Desafio Final LabSEC
 
-A new Flutter project.
+Aplicativo mobile em Flutter desenvolvido para o desafio do processo seletivo do LabSEC 2023a
 
-## Getting Started
+Para executar a aplicação:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Certifique-se que a SDK do Flutter esteja instalada, assim como o seu plugin no editor de código usado.
+- Utilize um dispositivo celular real, com Android 12 ou superior, conectado no computador por um cabo USB e 
+  ative a opção "Depuração USB" nas configurações do aparelho (a utilização de emuladores podem levar a problemas
+  na utilização da detecção de dispositivos BLE próximos).
+- Dentro do repositório do projeto, abra o terminal e execute o comando ‘flutter pub get’ para baixar corretamente
+  as bibliotecas do flutter necessárias para rodar a aplicação
+- Execute o arquivo 'main.dart' dentro da pasta lib e espere o aplicativo ser carregado no seu aparelho
